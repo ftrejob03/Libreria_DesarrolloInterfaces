@@ -43,6 +43,7 @@ public class UI extends JFrame{
 	protected JButton btConsultar;
 	protected JButton btGuardar;
 	protected JButton btBorrar;
+	protected JButton btModificar;
 	protected JButton btIniciar;
 	protected JButton btSalir;
 	protected JTable tablaLibros;
@@ -52,7 +53,7 @@ public class UI extends JFrame{
 		setAutoRequestFocus(false);
 		setEnabled(true); // Recordar revisar esta línea en caso de estar bloqueado la pantalla
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 500, 400);
+		setBounds(100, 100, 750, 500);
 		JPanel contentPane = new JPanel(new BorderLayout(10, 10));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -80,6 +81,9 @@ public class UI extends JFrame{
 		btBorrar = new JButton("BORRAR");
 		p_inferior.add(btBorrar);
 		
+		btModificar = new JButton("MODIFICAR");
+		p_inferior.add(btModificar);
+		
 		btIniciar = new JButton("INICIAR");
 		p_inferior.add(btIniciar);
 		
@@ -93,6 +97,7 @@ public class UI extends JFrame{
 		LIBRO.setBackground(new Color(255, 255, 128));
 		LIBRO.setToolTipText("LIBRO");
 		tbPane.addTab("LIBRO", null, LIBRO, null);
+		tbPane.setBackgroundAt(0, new Color(128, 255, 128));
 		
 		// --- FILA 0: ISBN ---
 		JLabel lbISBN = new JLabel("ISBN");
@@ -130,7 +135,6 @@ public class UI extends JFrame{
 		gbc_txTitulo.gridy = 1;
 		LIBRO.add(txTitulo, gbc_txTitulo);
 
-		// --- FILA 2: AUTOR ---
 		JLabel lbAutor = new JLabel("Autor");
 		GridBagConstraints gbc_lbAutor = new GridBagConstraints();
 		gbc_lbAutor.insets = new Insets(5, 5, 5, 5);
@@ -148,7 +152,6 @@ public class UI extends JFrame{
 		gbc_txAutor.gridy = 2;
 		LIBRO.add(txAutor, gbc_txAutor);
 
-		// --- FILA 3: EDITORIAL ---
 		JLabel lbEditorial = new JLabel("Editorial");
 		GridBagConstraints gbc_lbEditorial = new GridBagConstraints();
 		gbc_lbEditorial.insets = new Insets(5, 5, 5, 5);
@@ -166,7 +169,6 @@ public class UI extends JFrame{
 		gbc_txEditorial.gridy = 3;
 		LIBRO.add(txEditorial, gbc_txEditorial);
 
-		// --- FILA 4: PRECIO ---
 		JLabel lbPrecio = new JLabel("Precio");
 		GridBagConstraints gbc_lbPrecio = new GridBagConstraints();
 		gbc_lbPrecio.insets = new Insets(5, 5, 5, 5);
@@ -187,9 +189,14 @@ public class UI extends JFrame{
 		LIBRO.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txISBN, txTitulo, txAutor, txEditorial, txPrecio}));
 		
 		JPanel ESTANTERIA = new JPanel(new BorderLayout());
+		ESTANTERIA.setBackground(new Color(255, 255, 128));
 		tbPane.addTab("ESTANTERIA", null, ESTANTERIA, null);
+		tbPane.setBackgroundAt(1, new Color(128, 255, 128));
 		
 		tablaLibros = new JTable();
+		tablaLibros.setRowHeight(32);
+		tablaLibros.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		tablaLibros.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 14));
 		JScrollPane scrollPane = new JScrollPane(tablaLibros);
 		ESTANTERIA.add(scrollPane, BorderLayout.CENTER);
 

@@ -35,6 +35,12 @@ public class Estanteria {
 		arrayLibro.add(libro);
 	}
 	
+	public void modificarLibro(int indice, Libro libromodificado) {
+		if (indice >= 0 && indice < arrayLibro.size()) {
+			arrayLibro.set(indice, libromodificado);
+		}
+	}
+	
 	public void borrarLibros(int indice) {
 		if (indice >= 0 && indice < arrayLibro.size()) {
 			arrayLibro.remove(indice);

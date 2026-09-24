@@ -35,6 +35,12 @@ public class ParaUI extends UI {
 			}
 		});
 		
+		btModificar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				modificarLibro();
+			}
+		});
+		
 		btIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				iniciarEstanteria();
@@ -82,17 +88,16 @@ public class ParaUI extends UI {
 			return;
 		}
 	
+		if (!validarFormulario()) {
+			return;
+		}
+		
 		// Proceso de guardado de datos que insertamos en los campos.
 		String ISBN = txISBN.getText().trim();
 		String titulo = txTitulo.getText().trim();
 		String autor = txAutor.getText().trim();
 		String editorial = txEditorial.getText().trim();
 		String precio = txPrecio.getText().trim();
-		
-		if (ISBN.isEmpty() || titulo.isEmpty() || autor.isEmpty() || editorial.isEmpty() || precio.isEmpty()) {
-			mostrarAviso("Por favor, completa los campos antes de guardar.");
-			return;
-		}
 		
 		Libro libro = new Libro(ISBN, titulo, autor, editorial, precio);
 		estanteria.anadirLibros(libro);
@@ -139,7 +144,40 @@ public class ParaUI extends UI {
 		txAutor.setText(libro.getAutor());
 		txEditorial.setText(libro.getEditorial());
 		txPrecio.setText(libro.getPrecio());
-		mostrarInfo("Datos del libro cargados en el formulario.");
+		
+		txISBN.setEnabled(false);
+		mostrarInfo("Datos cargados, puedes modificar los campos (excepto ISBN) y pulsar MODIFICAR.");
+	}
+	
+	private void modificarLibro() {
+		if (!iniciado) {
+			mostrarAviso("Primero debes pulsar INICIAR para inicializar la estantería.");
+			return;
+		}
+		
+		int indice = estanteria.obtenerIdSeleccionado(tablaLibros);
+		if (indice == -1) {
+			mostrarAviso("Por favor, selecciona un libro en la tabla para consultar.");
+			return;
+		}
+		
+		if (!validarFormulario()) {
+			return;
+		}
+		
+		String ISBN = txISBN.getText().trim();
+		String titulo = txTitulo.getText().trim();
+		String autor = txAutor.getText().trim();
+		String editorial = txEditorial.getText().trim();
+		String precio = txPrecio.getText().trim();
+		
+		if (confirmarAccion("¿Deseas guardar los cambios de este libro?", "Confirmar modificación")) {
+			Libro libromodificado = new Libro(ISBN, titulo, autor, editorial, precio);
+			estanteria.modificarLibro(indice, libromodificado);
+			estanteria.rellenarTabla(tablaLibros);
+			limpiarCampos();
+			mostrarInfo("Libro modificado correctamente.");
+		}
 	}
 	//////////////////////////////
 	private void mostrarInfo(String mensaje) {
@@ -161,7 +199,82 @@ public class ParaUI extends UI {
 		txAutor.setText("");
 		txEditorial.setText("");
 		txPrecio.setText("");
+		
+		txISBN.setEditable(true);
 		txISBN.requestFocus();
+	}
+	
+	private String validarISBN(String ISBN) {
+		if (ISBN.isEmpty()) {
+			return "El campo ISBN no puede estar vacío";
+		}
+		if (!ISBN.matches("\\d{13}")) {
+			return "El ISBN debe contener exactamente 13 dígitos numéricos (sin letras ni guiones).";
+		}
+		return null; // Válido
+	}
+	
+	private String validarPrecio(String precioStr) {
+		if (precioStr.isEmpty()) {
+			return "El campo Precio no puede estar vacío";
+		}
+		try {
+			double precio = Double.parseDouble(precioStr.replace(",", "."));
+			if (precio <= 0) {
+				return "El precio debe ser un número mayor que 0.";
+			}
+		} catch (NumberFormatException e) {
+			return "El formato del precio no es válido (ejemplo: 15.95).";
+		}
+		return null; // Válido
+	}
+	
+	private String validarTexto(String texto, String nombreCampo) {
+		if (texto.isEmpty()) {
+			return "El campo" + nombreCampo + " no puede estar vacío.";
+		}
+		return null; // Válido
+	}
+	
+	private boolean validarFormulario() {
+		String error;
+		
+		error = validarISBN(txISBN.getText().trim());
+		if (error != null) {
+			mostrarAviso(error);
+			txISBN.requestFocus();
+			return false;
+		}
+		
+		error = validarTexto(txTitulo.getText().trim(), "Título");
+		if (error != null) {
+			mostrarAviso(error);
+			txTitulo.requestFocus();
+			return false;
+		}
+
+		error = validarTexto(txAutor.getText().trim(), "Autor");
+		if (error != null) {
+			mostrarAviso(error);
+			txAutor.requestFocus();
+			return false;
+		}
+		
+		error = validarTexto(txEditorial.getText().trim(), "Editorial");
+		if (error != null) {
+			mostrarAviso(error);
+			txEditorial.requestFocus();
+			return false;
+			
+		}
+		
+		error = validarPrecio(txPrecio.getText().trim());
+		if (error != null) {
+			mostrarAviso(error);
+			txPrecio.requestFocus();
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean isIniciado() {
