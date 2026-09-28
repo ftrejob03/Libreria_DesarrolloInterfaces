@@ -7,6 +7,7 @@ import javax.swing.JOptionPane;
 
 import modelo.Estanteria;
 import modelo.Libro;
+import utiles.Validaciones;
 import vista.UI;
 
 public class ParaUI extends UI {
@@ -14,6 +15,7 @@ public class ParaUI extends UI {
 	private static final String TITULO_AVISO = "Aviso";
 	
 	private Estanteria estanteria = new Estanteria();
+	private Validaciones validacion;
 	private boolean iniciado = false;
 	
 	public ParaUI() {
@@ -61,13 +63,13 @@ public class ParaUI extends UI {
 			mostrarAviso("La estantería ya se encuentra inicializada.");
 			return;
 		}
-		estanteria.anadirLibros(new Libro("9788420471839", "Cien años de soledad", "G. García Márquez", "Debolsillo", "15.95"));
-		estanteria.anadirLibros(new Libro("9788439736966", "1984", "George Orwell", "Debolsillo", "12.50"));
-		estanteria.anadirLibros(new Libro("9788420684093", "El hobbit", "J.R.R. Tolkien", "Minotauro", "18.00"));
-		estanteria.anadirLibros(new Libro("9788437604947", "Don Quijote de la Mancha", "Miguel de Cervantes", "Cátedra", "14.25"));
-		estanteria.anadirLibros(new Libro("9788497593083", "Fahrenheit 451", "Ray Bradbury", "Debolsillo", "9.95"));
-		estanteria.anadirLibros(new Libro("9788478887194", "El Principito", "Antoine de Saint-Exupéry", "Salamandra", "8.50"));
-		estanteria.anadirLibros(new Libro("9788497594257", "Un mundo feliz", "Aldous Huxley", "Debolsillo", "10.95"));
+		estanteria.anadirLibros(new Libro("9788420471839", "Clean Code", "Robert C. Martin", "Pearson Prentice Hall", "15.95"));
+		estanteria.anadirLibros(new Libro("9788439736966", "Refactoring", "Martin Fowler", "Addison-Wesley", "12.50"));
+		estanteria.anadirLibros(new Libro("9788420684093", "El lenguaje de programación C", "Brian Kernighan y Dennis Ritchie", "Pearson Prentice Hall", "18.00"));
+		estanteria.anadirLibros(new Libro("9788437604947", "Redes de computadoras", "Andrew Tanenbaum", "Pearson Prentice Hall", "14.25"));
+		estanteria.anadirLibros(new Libro("9788497593083", "Organización y diseño de computadoras", "David Patterson y John Hennessy", "McGraw Hill", "9.95"));
+		estanteria.anadirLibros(new Libro("9788478887194", "Fundamentos de sistemas de bases de datos", "Ramez Elmasri y Shamkant Navathe", "Addison-Wesley", "8.50"));
+		estanteria.anadirLibros(new Libro("9788497594257", "Sistemas Operativos", "William Stallings", "Pearson Prentice Hall", "10.95"));
 		
 		estanteria.rellenarTabla(tablaLibros);
 		
@@ -81,30 +83,60 @@ public class ParaUI extends UI {
 			mostrarAviso("Primero debes pulsar INICIAR para inicializar la estantería.");
 			return;
 		}
-		
 		// Control de que no sobrepase más de 10 libros
 		if (estanteria.getEstanteria().size() >= 10) {
 			mostrarAviso("La estantería está lleno con 10 libros, no se puede llenar más.");
 			return;
 		}
-	
-		if (!validarFormulario()) {
-			return;
-		}
-		
-		// Proceso de guardado de datos que insertamos en los campos.
+
 		String ISBN = txISBN.getText().trim();
 		String titulo = txTitulo.getText().trim();
 		String autor = txAutor.getText().trim();
 		String editorial = txEditorial.getText().trim();
 		String precio = txPrecio.getText().trim();
 		
+		if (!validacion.validaISBN(ISBN)) {
+			mostrarAviso("El ISBN debe tener exactamente 13 digitos numericos.");
+			txISBN.requestFocus();
+			return;
+		}
+		
+		if (estanteria.existeISBN(ISBN)) {
+			mostrarAviso("Ya existe un libro registrado con el ISBN "+ISBN);
+			txISBN.requestFocus();
+			return;
+		}
+		
+		if (titulo.isEmpty()) {
+			mostrarAviso("El campo Título no puede estar vacío.");
+			txTitulo.requestFocus();
+			return;
+		}
+		
+		if (!validacion.validaLetters(autor)) {
+			mostrarAviso("El campo Autor solo debe contener letras y espacios.");
+			txAutor.requestFocus();
+			return;
+		}
+		
+		if (!validacion.validaLetters(editorial)) {
+			mostrarAviso("El campo Editorial solo debe contener letras y espacios.");
+			txEditorial.requestFocus();
+			return;
+		}
+		
+		if (!validacion.isNumberFloat(precio)) {
+			mostrarAviso("El formato del precio no es válido (ejemplo: 15.95)");
+			txPrecio.requestFocus();
+			return;
+		}
+		
 		Libro libro = new Libro(ISBN, titulo, autor, editorial, precio);
 		estanteria.anadirLibros(libro);
 		estanteria.rellenarTabla(tablaLibros);
 		
 		limpiarCampos();
-		mostrarInfo("Libro guardado con éxito.");
+		mostrarInfo("Libro guardado correctamente.");
 	}
 
 	private void borrarLibro() {
@@ -161,15 +193,35 @@ public class ParaUI extends UI {
 			return;
 		}
 		
-		if (!validarFormulario()) {
-			return;
-		}
-		
 		String ISBN = txISBN.getText().trim();
 		String titulo = txTitulo.getText().trim();
 		String autor = txAutor.getText().trim();
 		String editorial = txEditorial.getText().trim();
 		String precio = txPrecio.getText().trim();
+		
+		if (titulo.isEmpty()) {
+			mostrarAviso("El campo Título no puede estar vacío.");
+			txTitulo.requestFocus();
+			return;
+		}
+		
+		if (!validacion.validaLetters(autor)) {
+			mostrarAviso("El campo Autor solo debe contener letras y espacios.");
+			txAutor.requestFocus();
+			return;
+		}
+		
+		if (!validacion.validaLetters(editorial)) {
+			mostrarAviso("El campo Editorial solo debe contener letras y espacios.");
+			txEditorial.requestFocus();
+			return;
+		}
+		
+		if (!validacion.isNumberFloat(precio)) {
+			mostrarAviso("el formato del precio no es válido (ejemplo: 15.95");
+			txPrecio.requestFocus();
+			return;
+		}
 		
 		if (confirmarAccion("¿Deseas guardar los cambios de este libro?", "Confirmar modificación")) {
 			Libro libromodificado = new Libro(ISBN, titulo, autor, editorial, precio);
@@ -200,81 +252,8 @@ public class ParaUI extends UI {
 		txEditorial.setText("");
 		txPrecio.setText("");
 		
-		txISBN.setEditable(true);
+		txISBN.setEnabled(true);
 		txISBN.requestFocus();
-	}
-	
-	private String validarISBN(String ISBN) {
-		if (ISBN.isEmpty()) {
-			return "El campo ISBN no puede estar vacío";
-		}
-		if (!ISBN.matches("\\d{13}")) {
-			return "El ISBN debe contener exactamente 13 dígitos numéricos (sin letras ni guiones).";
-		}
-		return null; // Válido
-	}
-	
-	private String validarPrecio(String precioStr) {
-		if (precioStr.isEmpty()) {
-			return "El campo Precio no puede estar vacío";
-		}
-		try {
-			double precio = Double.parseDouble(precioStr.replace(",", "."));
-			if (precio <= 0) {
-				return "El precio debe ser un número mayor que 0.";
-			}
-		} catch (NumberFormatException e) {
-			return "El formato del precio no es válido (ejemplo: 15.95).";
-		}
-		return null; // Válido
-	}
-	
-	private String validarTexto(String texto, String nombreCampo) {
-		if (texto.isEmpty()) {
-			return "El campo" + nombreCampo + " no puede estar vacío.";
-		}
-		return null; // Válido
-	}
-	
-	private boolean validarFormulario() {
-		String error;
-		
-		error = validarISBN(txISBN.getText().trim());
-		if (error != null) {
-			mostrarAviso(error);
-			txISBN.requestFocus();
-			return false;
-		}
-		
-		error = validarTexto(txTitulo.getText().trim(), "Título");
-		if (error != null) {
-			mostrarAviso(error);
-			txTitulo.requestFocus();
-			return false;
-		}
-
-		error = validarTexto(txAutor.getText().trim(), "Autor");
-		if (error != null) {
-			mostrarAviso(error);
-			txAutor.requestFocus();
-			return false;
-		}
-		
-		error = validarTexto(txEditorial.getText().trim(), "Editorial");
-		if (error != null) {
-			mostrarAviso(error);
-			txEditorial.requestFocus();
-			return false;
-			
-		}
-		
-		error = validarPrecio(txPrecio.getText().trim());
-		if (error != null) {
-			mostrarAviso(error);
-			txPrecio.requestFocus();
-			return false;
-		}
-		return true;
 	}
 	
 	public boolean isIniciado() {

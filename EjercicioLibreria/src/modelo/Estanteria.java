@@ -31,6 +31,15 @@ public class Estanteria {
 		return tablaLibros.getSelectedRow();
 	}
 	
+	public boolean existeISBN(String ISBN) {
+		for (Libro libro : arrayLibro) {
+			if (libro.getISBN().equalsIgnoreCase(ISBN)) {
+				return true; // Ya existe
+			}
+		}
+		return false; // No existe, está libre
+	}
+	
 	public void anadirLibros(Libro libro) {
 		arrayLibro.add(libro);
 	}
