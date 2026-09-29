@@ -1,9 +1,11 @@
 package controlador;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 import modelo.Estanteria;
 import modelo.Libro;
@@ -15,7 +17,6 @@ public class ParaUI extends UI {
 	private static final String TITULO_AVISO = "Aviso";
 	
 	private Estanteria estanteria = new Estanteria();
-	private Validaciones validacion;
 	private boolean iniciado = false;
 	
 	public ParaUI() {
@@ -85,7 +86,7 @@ public class ParaUI extends UI {
 		}
 		// Control de que no sobrepase más de 10 libros
 		if (estanteria.getEstanteria().size() >= 10) {
-			mostrarAviso("La estantería está lleno con 10 libros, no se puede llenar más.");
+			mostrarAviso("Está lleno con 10 libros, no se puede llenar más.");
 			return;
 		}
 
@@ -95,39 +96,33 @@ public class ParaUI extends UI {
 		String editorial = txEditorial.getText().trim();
 		String precio = txPrecio.getText().trim();
 		
-		if (!validacion.validaISBN(ISBN)) {
-			mostrarAviso("El ISBN debe tener exactamente 13 digitos numericos.");
-			txISBN.requestFocus();
+		if (!Validaciones.validaISBN(ISBN)) {
+			marcarErrorCampo(txISBN, "El ISBN debe tener exactamente 13 digitos numericos.");
 			return;
 		}
 		
 		if (estanteria.existeISBN(ISBN)) {
-			mostrarAviso("Ya existe un libro registrado con el ISBN "+ISBN);
-			txISBN.requestFocus();
+			marcarErrorCampo(txISBN, "Ya existe un libro registrado con el ISBN "+ISBN);
 			return;
 		}
 		
 		if (titulo.isEmpty()) {
-			mostrarAviso("El campo Título no puede estar vacío.");
-			txTitulo.requestFocus();
+			marcarErrorCampo(txTitulo, "El campo Título no puede estar vacío.");
 			return;
 		}
 		
-		if (!validacion.validaLetters(autor)) {
-			mostrarAviso("El campo Autor solo debe contener letras y espacios.");
-			txAutor.requestFocus();
+		if (!Validaciones.validaLetters(autor)) {
+			marcarErrorCampo(txAutor, "El campo Autor solo debe contener letras y espacios.");
 			return;
 		}
 		
-		if (!validacion.validaLetters(editorial)) {
-			mostrarAviso("El campo Editorial solo debe contener letras y espacios.");
-			txEditorial.requestFocus();
+		if (!Validaciones.validaLetters(editorial)) {
+			marcarErrorCampo(txEditorial, "El campo Editorial solo debe contener letras y espacios.");
 			return;
 		}
 		
-		if (!validacion.isNumberFloat(precio)) {
-			mostrarAviso("El formato del precio no es válido (ejemplo: 15.95)");
-			txPrecio.requestFocus();
+		if (!Validaciones.isNumberFloat(precio)) {
+			marcarErrorCampo(txPrecio, "El formato del precio no es válido (ejemplo: 15.95)");
 			return;
 		}
 		
@@ -189,7 +184,7 @@ public class ParaUI extends UI {
 		
 		int indice = estanteria.obtenerIdSeleccionado(tablaLibros);
 		if (indice == -1) {
-			mostrarAviso("Por favor, selecciona un libro en la tabla para consultar.");
+			mostrarAviso("Por favor, selecciona un libro en la tabla para modificar.");
 			return;
 		}
 		
@@ -200,26 +195,22 @@ public class ParaUI extends UI {
 		String precio = txPrecio.getText().trim();
 		
 		if (titulo.isEmpty()) {
-			mostrarAviso("El campo Título no puede estar vacío.");
-			txTitulo.requestFocus();
+			marcarErrorCampo(txTitulo, "El campo Título no puede estar vacío.");
 			return;
 		}
 		
-		if (!validacion.validaLetters(autor)) {
-			mostrarAviso("El campo Autor solo debe contener letras y espacios.");
-			txAutor.requestFocus();
+		if (!Validaciones.validaLetters(autor)) {
+			marcarErrorCampo(txAutor, "El campo Autor solo debe contener letras y espacios.");
 			return;
 		}
 		
-		if (!validacion.validaLetters(editorial)) {
-			mostrarAviso("El campo Editorial solo debe contener letras y espacios.");
-			txEditorial.requestFocus();
+		if (!Validaciones.validaLetters(editorial)) {
+			marcarErrorCampo(txEditorial, "El campo Editorial solo debe contener letras y espacios.");
 			return;
 		}
 		
-		if (!validacion.isNumberFloat(precio)) {
-			mostrarAviso("el formato del precio no es válido (ejemplo: 15.95");
-			txPrecio.requestFocus();
+		if (!Validaciones.isNumberFloat(precio)) {
+			marcarErrorCampo(txPrecio, "El formato del precio no es válido (ejemplo: 15.95)");
 			return;
 		}
 		
@@ -232,6 +223,34 @@ public class ParaUI extends UI {
 		}
 	}
 	//////////////////////////////
+	private void limpiarCampos() {
+		txISBN.setText("");
+		txTitulo.setText("");
+		txAutor.setText("");
+		txEditorial.setText("");
+		txPrecio.setText("");
+		
+		restaurarColores();
+		txISBN.setEnabled(true);
+		txISBN.requestFocus();
+	}
+	
+	private void restaurarColores() {
+		Color blanco = Color.WHITE;
+		txISBN.setBackground(blanco);
+		txTitulo.setBackground(blanco);
+		txAutor.setBackground(blanco);
+		txEditorial.setBackground(blanco);
+		txPrecio.setBackground(blanco);
+	}
+	
+	private void marcarErrorCampo(JTextField campo, String mensaje) {
+		restaurarColores();
+		campo.setBackground(new Color(255, 200, 200));
+		campo.requestFocus();
+		mostrarAviso(mensaje);
+	}
+	
 	private void mostrarInfo(String mensaje) {
 		JOptionPane.showMessageDialog(this, mensaje, TITULO_EXITO, JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -245,16 +264,6 @@ public class ParaUI extends UI {
 		return respuesta == JOptionPane.YES_OPTION;
 	}
 	
-	private void limpiarCampos() {
-		txISBN.setText("");
-		txTitulo.setText("");
-		txAutor.setText("");
-		txEditorial.setText("");
-		txPrecio.setText("");
-		
-		txISBN.setEnabled(true);
-		txISBN.requestFocus();
-	}
 	
 	public boolean isIniciado() {
 		return iniciado;
