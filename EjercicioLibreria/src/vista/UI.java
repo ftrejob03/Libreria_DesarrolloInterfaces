@@ -37,6 +37,12 @@ public class UI extends JFrame {
 	protected JTextField txEditorial;
 	protected JTextField txPrecio;
 	
+	protected JLabel lbErrorISBN;
+	protected JLabel lbErrorTitulo;
+	protected JLabel lbErrorAutor;
+	protected JLabel lbErrorEditorial;
+	protected JLabel lbErrorPrecio;
+
 	protected JRadioButton rdbtnCartone;
 	protected JRadioButton rdbtnRustica;
 	protected JRadioButton rdbtnGrapada;
@@ -109,14 +115,16 @@ public class UI extends JFrame {
 		LIBRO.setBackground(new Color(250, 250, 210));
 		tbPane.addTab("LIBRO", null, LIBRO, null);
 		
-		Dimension tamCaja = new Dimension(160, 24);
+		Dimension tamCaja = new Dimension(140, 24);
+		Font fuenteError = new Font("Tahoma", Font.BOLD, 11);
 
 		// --- FILA 0: ISBN ---
 		JLabel lbISBN = new JLabel("ISBN:");
 		GridBagConstraints gbc_lbISBN = new GridBagConstraints();
 		gbc_lbISBN.anchor = GridBagConstraints.WEST;
 		gbc_lbISBN.insets = new Insets(10, 15, 5, 5);
-		gbc_lbISBN.gridx = 0; gbc_lbISBN.gridy = 0;
+		gbc_lbISBN.gridx = 0; 
+		gbc_lbISBN.gridy = 0;
 		LIBRO.add(lbISBN, gbc_lbISBN);
 
 		txISBN = new JTextField();
@@ -124,15 +132,27 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_txISBN = new GridBagConstraints();
 		gbc_txISBN.anchor = GridBagConstraints.WEST;
 		gbc_txISBN.insets = new Insets(10, 5, 5, 15);
-		gbc_txISBN.gridx = 1; gbc_txISBN.gridy = 0;
+		gbc_txISBN.gridx = 1; 
+		gbc_txISBN.gridy = 0;
 		LIBRO.add(txISBN, gbc_txISBN);
+		
+		lbErrorISBN = new JLabel("");
+		lbErrorISBN.setFont(fuenteError);
+		lbErrorISBN.setForeground(Color.RED);
+		GridBagConstraints gbc_lbErrorISBN = new GridBagConstraints();
+		gbc_lbErrorISBN.anchor = GridBagConstraints.WEST;
+		gbc_lbErrorISBN.insets = new Insets(10, 5, 5, 10);
+		gbc_lbErrorISBN.gridx = 2;
+		gbc_lbErrorISBN.gridy = 0;
+		LIBRO.add(lbErrorISBN, gbc_lbErrorISBN);
 
 		// --- FILA 1: TITULO ---
 		JLabel lblTitulo = new JLabel("Titulo:");
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
 		gbc_lblTitulo.anchor = GridBagConstraints.WEST;
 		gbc_lblTitulo.insets = new Insets(5, 15, 5, 5);
-		gbc_lblTitulo.gridx = 0; gbc_lblTitulo.gridy = 1;
+		gbc_lblTitulo.gridx = 0; 
+		gbc_lblTitulo.gridy = 1;
 		LIBRO.add(lblTitulo, gbc_lblTitulo);
 
 		txTitulo = new JTextField();
@@ -140,15 +160,27 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_txTitulo = new GridBagConstraints();
 		gbc_txTitulo.anchor = GridBagConstraints.WEST;
 		gbc_txTitulo.insets = new Insets(5, 5, 5, 15);
-		gbc_txTitulo.gridx = 1; gbc_txTitulo.gridy = 1;
+		gbc_txTitulo.gridx = 1; 
+		gbc_txTitulo.gridy = 1;
 		LIBRO.add(txTitulo, gbc_txTitulo);
+		
+		lbErrorTitulo = new JLabel("");
+		lbErrorTitulo.setFont(fuenteError);
+		lbErrorTitulo.setForeground(Color.RED);
+		GridBagConstraints gbc_lbErrorTitulo = new GridBagConstraints();
+		gbc_lbErrorTitulo.anchor = GridBagConstraints.WEST;
+		gbc_lbErrorTitulo.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorTitulo.gridx = 2;
+		gbc_lbErrorTitulo.gridy = 1;
+		LIBRO.add(lbErrorTitulo, gbc_lbErrorTitulo);
 
 		// --- FILA 2: AUTOR ---
 		JLabel lbAutor = new JLabel("Autor:");
 		GridBagConstraints gbc_lbAutor = new GridBagConstraints();
 		gbc_lbAutor.anchor = GridBagConstraints.WEST;
 		gbc_lbAutor.insets = new Insets(5, 15, 5, 5);
-		gbc_lbAutor.gridx = 0; gbc_lbAutor.gridy = 2;
+		gbc_lbAutor.gridx = 0; 
+		gbc_lbAutor.gridy = 2;
 		LIBRO.add(lbAutor, gbc_lbAutor);
 
 		txAutor = new JTextField();
@@ -156,15 +188,27 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_txAutor = new GridBagConstraints();
 		gbc_txAutor.anchor = GridBagConstraints.WEST;
 		gbc_txAutor.insets = new Insets(5, 5, 5, 15);
-		gbc_txAutor.gridx = 1; gbc_txAutor.gridy = 2;
+		gbc_txAutor.gridx = 1; 
+		gbc_txAutor.gridy = 2;
 		LIBRO.add(txAutor, gbc_txAutor);
+		
+		lbErrorAutor = new JLabel("");
+		lbErrorAutor.setFont(fuenteError);
+		lbErrorAutor.setForeground(Color.RED);
+		GridBagConstraints gbc_lbErrorAutor = new GridBagConstraints();
+		gbc_lbErrorAutor.anchor = GridBagConstraints.WEST;
+		gbc_lbErrorAutor.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorAutor.gridx = 2;
+		gbc_lbErrorAutor.gridy = 2;
+		LIBRO.add(lbErrorAutor, gbc_lbErrorAutor);
 
 		// --- FILA 3: EDITORIAL ---
 		JLabel lbEditorial = new JLabel("Editorial:");
 		GridBagConstraints gbc_lbEditorial = new GridBagConstraints();
 		gbc_lbEditorial.anchor = GridBagConstraints.WEST;
 		gbc_lbEditorial.insets = new Insets(5, 15, 5, 5);
-		gbc_lbEditorial.gridx = 0; gbc_lbEditorial.gridy = 3;
+		gbc_lbEditorial.gridx = 0; 
+		gbc_lbEditorial.gridy = 3;
 		LIBRO.add(lbEditorial, gbc_lbEditorial);
 
 		txEditorial = new JTextField();
@@ -172,15 +216,27 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_txEditorial = new GridBagConstraints();
 		gbc_txEditorial.anchor = GridBagConstraints.WEST;
 		gbc_txEditorial.insets = new Insets(5, 5, 5, 15);
-		gbc_txEditorial.gridx = 1; gbc_txEditorial.gridy = 3;
+		gbc_txEditorial.gridx = 1; 
+		gbc_txEditorial.gridy = 3;
 		LIBRO.add(txEditorial, gbc_txEditorial);
+		
+		lbErrorEditorial = new JLabel("");
+		lbErrorEditorial.setFont(fuenteError);
+		lbErrorEditorial.setForeground(Color.RED);
+		GridBagConstraints gbc_lbErrorEditorial = new GridBagConstraints();
+		gbc_lbErrorEditorial.anchor = GridBagConstraints.WEST;
+		gbc_lbErrorEditorial.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorEditorial.gridx = 2;
+		gbc_lbErrorEditorial.gridy = 3;
+		LIBRO.add(lbErrorEditorial, gbc_lbErrorEditorial);
 
 		// --- FILA 4: PRECIO ---
 		JLabel lbPrecio = new JLabel("Precio:");
 		GridBagConstraints gbc_lbPrecio = new GridBagConstraints();
 		gbc_lbPrecio.anchor = GridBagConstraints.WEST;
 		gbc_lbPrecio.insets = new Insets(5, 15, 10, 5);
-		gbc_lbPrecio.gridx = 0; gbc_lbPrecio.gridy = 4;
+		gbc_lbPrecio.gridx = 0; 
+		gbc_lbPrecio.gridy = 4;
 		LIBRO.add(lbPrecio, gbc_lbPrecio);
 
 		txPrecio = new JTextField();
@@ -188,8 +244,19 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_txPrecio = new GridBagConstraints();
 		gbc_txPrecio.anchor = GridBagConstraints.WEST;
 		gbc_txPrecio.insets = new Insets(5, 5, 10, 15);
-		gbc_txPrecio.gridx = 1; gbc_txPrecio.gridy = 4;
+		gbc_txPrecio.gridx = 1; 
+		gbc_txPrecio.gridy = 4;
 		LIBRO.add(txPrecio, gbc_txPrecio);
+		
+		lbErrorPrecio = new JLabel("");
+		lbErrorPrecio.setFont(fuenteError);
+		lbErrorPrecio.setForeground(Color.RED);
+		GridBagConstraints gbc_lbErrorPrecio = new GridBagConstraints();
+		gbc_lbErrorPrecio.anchor = GridBagConstraints.WEST;
+		gbc_lbErrorPrecio.insets = new Insets(5, 5, 10, 10);
+		gbc_lbErrorPrecio.gridx = 2;
+		gbc_lbErrorPrecio.gridy = 4;
+		LIBRO.add(lbErrorPrecio, gbc_lbErrorPrecio);
 
 		// --- COLUMNA 2: IMAGEN (Filas 0 a 4) ---
 		lbImagenLibro = new JLabel();
@@ -203,7 +270,8 @@ public class UI extends JFrame {
 		}
 
 		GridBagConstraints gbc_img = new GridBagConstraints();
-		gbc_img.gridx = 2; gbc_img.gridy = 0;
+		gbc_img.gridx = 3; 
+		gbc_img.gridy = 0;
 		gbc_img.gridheight = 5; // Abarca 5 filas de alto
 		gbc_img.fill = GridBagConstraints.BOTH;
 		gbc_img.weightx = 1.0;
@@ -215,7 +283,8 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_lbFormato = new GridBagConstraints();
 		gbc_lbFormato.anchor = GridBagConstraints.WEST;
 		gbc_lbFormato.insets = new Insets(10, 15, 5, 5);
-		gbc_lbFormato.gridx = 0; gbc_lbFormato.gridy = 5;
+		gbc_lbFormato.gridx = 0; 
+		gbc_lbFormato.gridy = 5;
 		LIBRO.add(lbFormato, gbc_lbFormato);
 
 		JPanel panelFormato = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 5));
@@ -245,7 +314,8 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_panelFormato = new GridBagConstraints();
 		gbc_panelFormato.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelFormato.insets = new Insets(10, 5, 5, 15);
-		gbc_panelFormato.gridx = 1; gbc_panelFormato.gridy = 5;
+		gbc_panelFormato.gridx = 1; 
+		gbc_panelFormato.gridy = 5;
 		gbc_panelFormato.gridwidth = 2; // Abarca las columnas de texto e imagen
 		LIBRO.add(panelFormato, gbc_panelFormato);
 
@@ -254,7 +324,8 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_lbEstado = new GridBagConstraints();
 		gbc_lbEstado.anchor = GridBagConstraints.WEST;
 		gbc_lbEstado.insets = new Insets(5, 15, 10, 5);
-		gbc_lbEstado.gridx = 0; gbc_lbEstado.gridy = 6;
+		gbc_lbEstado.gridx = 0; 
+		gbc_lbEstado.gridy = 6;
 		LIBRO.add(lbEstado, gbc_lbEstado);
 
 		JPanel panelEstado = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 5));
@@ -276,11 +347,11 @@ public class UI extends JFrame {
 		GridBagConstraints gbc_panelEstado = new GridBagConstraints();
 		gbc_panelEstado.fill = GridBagConstraints.HORIZONTAL;
 		gbc_panelEstado.insets = new Insets(5, 5, 10, 15);
-		gbc_panelEstado.gridx = 1; gbc_panelEstado.gridy = 6;
+		gbc_panelEstado.gridx = 1; 
+		gbc_panelEstado.gridy = 6;
 		gbc_panelEstado.gridwidth = 2; // Abarca las columnas de texto e imagen
 		LIBRO.add(panelEstado, gbc_panelEstado);
-
-		LIBRO.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txISBN, txTitulo, txAutor, txEditorial, txPrecio}));
+		LIBRO.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txISBN, txTitulo, txAutor, txEditorial, txPrecio, lbErrorISBN, lbErrorTitulo, lbErrorAutor, lbErrorEditorial, lbErrorPrecio}));
 		
 		// --- PESTAÑA LISTA DE LIBROS ---
 		JPanel ESTANTERIA = new JPanel(new BorderLayout());
