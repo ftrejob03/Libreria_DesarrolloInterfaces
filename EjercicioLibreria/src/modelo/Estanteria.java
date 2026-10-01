@@ -9,14 +9,17 @@ public class Estanteria {
 	private ArrayList<Libro> arrayLibro = new ArrayList<Libro>();
 	
 	public void rellenarTabla(JTable tablaLibros) {
-		String nombresColumnas[] = {"ISBN", "TITULO", "AUTOR", "EDITORIAL", "PRECIO"};
-		String[][] filasTabla = new String[this.arrayLibro.size()][5];
+		String nombresColumnas[] = {"ISBN", "TITULO", "AUTOR", "EDITORIAL", "PRECIO", "FORMATO", "ESTADO", "UNIDADES"};
+		String[][] filasTabla = new String[this.arrayLibro.size()][8];
 		for (int i = 0; i < this.arrayLibro.size(); i++) {
 			filasTabla[i][0] = this.arrayLibro.get(i).getISBN();
 			filasTabla[i][1] = this.arrayLibro.get(i).getTitulo();
 			filasTabla[i][2] = this.arrayLibro.get(i).getAutor();
 			filasTabla[i][3] = this.arrayLibro.get(i).getEditorial();
 			filasTabla[i][4] = this.arrayLibro.get(i).getPrecio();
+			filasTabla[i][5] = this.arrayLibro.get(i).getFormato();
+			filasTabla[i][6] = this.arrayLibro.get(i).getEstado();
+			filasTabla[i][7] = String.valueOf(this.arrayLibro.get(i).getUnidades());
 		}
 		DefaultTableModel tablaCompleta = new DefaultTableModel(filasTabla, nombresColumnas) {
 			@Override

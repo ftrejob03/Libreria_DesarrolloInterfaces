@@ -99,5 +99,9 @@ public class Libro {
 		this.unidades = unidades;
 	}
 
-	
+	@Override
+	public String toString() {
+		return ISBN+" - "+titulo+" (Stock: "+unidades+")";
+	}
+
 }

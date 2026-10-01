@@ -15,6 +15,7 @@ import java.net.URL;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +29,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
+import modelo.Libro;
+
 public class UI extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -36,12 +39,16 @@ public class UI extends JFrame {
 	protected JTextField txAutor;
 	protected JTextField txEditorial;
 	protected JTextField txPrecio;
+	protected JTextField txUnidades;
 	
 	protected JLabel lbErrorISBN;
 	protected JLabel lbErrorTitulo;
 	protected JLabel lbErrorAutor;
 	protected JLabel lbErrorEditorial;
 	protected JLabel lbErrorPrecio;
+	protected JLabel lbErrorUnidades;
+	protected JLabel lbErrorFormato;
+	protected JLabel lbErrorEstado;
 
 	protected JRadioButton rdbtnCartone;
 	protected JRadioButton rdbtnRustica;
@@ -63,12 +70,24 @@ public class UI extends JFrame {
 	protected JButton btIniciar;
 	protected JButton btSalir;
 	protected JTable tablaLibros;
+	
+	// Componentes para Pestaña REPONER
+	protected JComboBox<Libro> cbLibrosReponer;
+	protected JTextField txCantidadReponer;
+	protected JButton btAceptarReponer;
+	
+	// Componentes para Pestaña VENDER
+	protected JComboBox<Libro> cbLibrosVender;
+	protected JTextField txCantidadVender;
+	protected JButton btAceptarVender;
+	protected JTabbedPane tbPane;
+	
 
 	public UI() {
 		setAutoRequestFocus(false);
 		setEnabled(true);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 750, 530);
+		setBounds(100, 100, 850, 560);
 		
 		JPanel contentPane = new JPanel(new BorderLayout(10, 10));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,53 +95,60 @@ public class UI extends JFrame {
 		
 		// --- CABECERA ---
 		JPanel p_superior = new JPanel();
-		p_superior.setBackground(new Color(128, 255, 0));
+		p_superior.setBackground(new Color(196, 196, 0));
 		contentPane.add(p_superior, BorderLayout.NORTH);
 		
-		JLabel LBSuperior = new JLabel("LIBRERIA");
+		JLabel LBSuperior = new JLabel("LIBRERIA DE FÉLIX TREJO BAQUERO");
 		LBSuperior.setForeground(Color.WHITE);
 		LBSuperior.setFont(new Font("Tahoma", Font.BOLD, 20));
 		p_superior.add(LBSuperior);
 		
 		// --- BOTONERA INFERIOR ---
 		JPanel p_inferior = new JPanel();
-		p_inferior.setBackground(new Color(255, 105, 180));
+		p_inferior.setBackground(new Color(234, 237, 103));
 		contentPane.add(p_inferior, BorderLayout.SOUTH);
 		
 		btConsultar = new JButton("CONSULTAR");
+		btConsultar.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btConsultar);
 
 		btGuardar = new JButton("GUARDAR");
+		btGuardar.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btGuardar);
 		
 		btBorrar = new JButton("BORRAR");
+		btBorrar.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btBorrar);
 		
 		btModificar = new JButton("MODIFICAR");
+		btModificar.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btModificar);
 		
 		btIniciar = new JButton("INICIAR");
+		btIniciar.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btIniciar);
 		
-		btSalir = new JButton("SALIR");		
+		btSalir = new JButton("SALIR");
+		btSalir.setBackground(new Color(204, 153, 51));
 		p_inferior.add(btSalir);
 		
 		// --- PESTAÑAS ---
-		JTabbedPane tbPane = new JTabbedPane(JTabbedPane.TOP);
+		tbPane = new JTabbedPane(JTabbedPane.TOP);
+		tbPane.setBackground(new Color(255, 255, 128));
 		contentPane.add(tbPane, BorderLayout.CENTER);
 		
 		JPanel LIBRO = new JPanel(new GridBagLayout());
 		LIBRO.setBackground(new Color(250, 250, 210));
 		tbPane.addTab("LIBRO", null, LIBRO, null);
 		
-		Dimension tamCaja = new Dimension(140, 24);
+		Dimension tamCaja = new Dimension(130, 24);
 		Font fuenteError = new Font("Tahoma", Font.BOLD, 11);
 
 		// --- FILA 0: ISBN ---
 		JLabel lbISBN = new JLabel("ISBN:");
 		GridBagConstraints gbc_lbISBN = new GridBagConstraints();
 		gbc_lbISBN.anchor = GridBagConstraints.WEST;
-		gbc_lbISBN.insets = new Insets(10, 15, 5, 5);
+		gbc_lbISBN.insets = new Insets(8, 15, 3, 5);
 		gbc_lbISBN.gridx = 0; 
 		gbc_lbISBN.gridy = 0;
 		LIBRO.add(lbISBN, gbc_lbISBN);
@@ -131,7 +157,7 @@ public class UI extends JFrame {
 		txISBN.setPreferredSize(tamCaja);
 		GridBagConstraints gbc_txISBN = new GridBagConstraints();
 		gbc_txISBN.anchor = GridBagConstraints.WEST;
-		gbc_txISBN.insets = new Insets(10, 5, 5, 15);
+		gbc_txISBN.insets = new Insets(8, 5, 3, 5);
 		gbc_txISBN.gridx = 1; 
 		gbc_txISBN.gridy = 0;
 		LIBRO.add(txISBN, gbc_txISBN);
@@ -141,7 +167,7 @@ public class UI extends JFrame {
 		lbErrorISBN.setForeground(Color.RED);
 		GridBagConstraints gbc_lbErrorISBN = new GridBagConstraints();
 		gbc_lbErrorISBN.anchor = GridBagConstraints.WEST;
-		gbc_lbErrorISBN.insets = new Insets(10, 5, 5, 10);
+		gbc_lbErrorISBN.insets = new Insets(8, 5, 3, 10);
 		gbc_lbErrorISBN.gridx = 2;
 		gbc_lbErrorISBN.gridy = 0;
 		LIBRO.add(lbErrorISBN, gbc_lbErrorISBN);
@@ -150,7 +176,7 @@ public class UI extends JFrame {
 		JLabel lblTitulo = new JLabel("Titulo:");
 		GridBagConstraints gbc_lblTitulo = new GridBagConstraints();
 		gbc_lblTitulo.anchor = GridBagConstraints.WEST;
-		gbc_lblTitulo.insets = new Insets(5, 15, 5, 5);
+		gbc_lblTitulo.insets = new Insets(3, 15, 3, 5);
 		gbc_lblTitulo.gridx = 0; 
 		gbc_lblTitulo.gridy = 1;
 		LIBRO.add(lblTitulo, gbc_lblTitulo);
@@ -159,7 +185,7 @@ public class UI extends JFrame {
 		txTitulo.setPreferredSize(tamCaja);
 		GridBagConstraints gbc_txTitulo = new GridBagConstraints();
 		gbc_txTitulo.anchor = GridBagConstraints.WEST;
-		gbc_txTitulo.insets = new Insets(5, 5, 5, 15);
+		gbc_txTitulo.insets = new Insets(3, 5, 3, 5);
 		gbc_txTitulo.gridx = 1; 
 		gbc_txTitulo.gridy = 1;
 		LIBRO.add(txTitulo, gbc_txTitulo);
@@ -169,7 +195,7 @@ public class UI extends JFrame {
 		lbErrorTitulo.setForeground(Color.RED);
 		GridBagConstraints gbc_lbErrorTitulo = new GridBagConstraints();
 		gbc_lbErrorTitulo.anchor = GridBagConstraints.WEST;
-		gbc_lbErrorTitulo.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorTitulo.insets = new Insets(3, 5, 3, 10);
 		gbc_lbErrorTitulo.gridx = 2;
 		gbc_lbErrorTitulo.gridy = 1;
 		LIBRO.add(lbErrorTitulo, gbc_lbErrorTitulo);
@@ -178,7 +204,7 @@ public class UI extends JFrame {
 		JLabel lbAutor = new JLabel("Autor:");
 		GridBagConstraints gbc_lbAutor = new GridBagConstraints();
 		gbc_lbAutor.anchor = GridBagConstraints.WEST;
-		gbc_lbAutor.insets = new Insets(5, 15, 5, 5);
+		gbc_lbAutor.insets = new Insets(3, 15, 3, 5);
 		gbc_lbAutor.gridx = 0; 
 		gbc_lbAutor.gridy = 2;
 		LIBRO.add(lbAutor, gbc_lbAutor);
@@ -187,7 +213,7 @@ public class UI extends JFrame {
 		txAutor.setPreferredSize(tamCaja);
 		GridBagConstraints gbc_txAutor = new GridBagConstraints();
 		gbc_txAutor.anchor = GridBagConstraints.WEST;
-		gbc_txAutor.insets = new Insets(5, 5, 5, 15);
+		gbc_txAutor.insets = new Insets(3, 5, 3, 5);
 		gbc_txAutor.gridx = 1; 
 		gbc_txAutor.gridy = 2;
 		LIBRO.add(txAutor, gbc_txAutor);
@@ -197,7 +223,7 @@ public class UI extends JFrame {
 		lbErrorAutor.setForeground(Color.RED);
 		GridBagConstraints gbc_lbErrorAutor = new GridBagConstraints();
 		gbc_lbErrorAutor.anchor = GridBagConstraints.WEST;
-		gbc_lbErrorAutor.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorAutor.insets = new Insets(3, 5, 3, 10);
 		gbc_lbErrorAutor.gridx = 2;
 		gbc_lbErrorAutor.gridy = 2;
 		LIBRO.add(lbErrorAutor, gbc_lbErrorAutor);
@@ -206,7 +232,7 @@ public class UI extends JFrame {
 		JLabel lbEditorial = new JLabel("Editorial:");
 		GridBagConstraints gbc_lbEditorial = new GridBagConstraints();
 		gbc_lbEditorial.anchor = GridBagConstraints.WEST;
-		gbc_lbEditorial.insets = new Insets(5, 15, 5, 5);
+		gbc_lbEditorial.insets = new Insets(3, 15, 3, 5);
 		gbc_lbEditorial.gridx = 0; 
 		gbc_lbEditorial.gridy = 3;
 		LIBRO.add(lbEditorial, gbc_lbEditorial);
@@ -215,7 +241,7 @@ public class UI extends JFrame {
 		txEditorial.setPreferredSize(tamCaja);
 		GridBagConstraints gbc_txEditorial = new GridBagConstraints();
 		gbc_txEditorial.anchor = GridBagConstraints.WEST;
-		gbc_txEditorial.insets = new Insets(5, 5, 5, 15);
+		gbc_txEditorial.insets = new Insets(3, 5, 3, 5);
 		gbc_txEditorial.gridx = 1; 
 		gbc_txEditorial.gridy = 3;
 		LIBRO.add(txEditorial, gbc_txEditorial);
@@ -225,7 +251,7 @@ public class UI extends JFrame {
 		lbErrorEditorial.setForeground(Color.RED);
 		GridBagConstraints gbc_lbErrorEditorial = new GridBagConstraints();
 		gbc_lbErrorEditorial.anchor = GridBagConstraints.WEST;
-		gbc_lbErrorEditorial.insets = new Insets(5, 5, 5, 10);
+		gbc_lbErrorEditorial.insets = new Insets(3, 5, 3, 10);
 		gbc_lbErrorEditorial.gridx = 2;
 		gbc_lbErrorEditorial.gridy = 3;
 		LIBRO.add(lbErrorEditorial, gbc_lbErrorEditorial);
@@ -234,7 +260,7 @@ public class UI extends JFrame {
 		JLabel lbPrecio = new JLabel("Precio:");
 		GridBagConstraints gbc_lbPrecio = new GridBagConstraints();
 		gbc_lbPrecio.anchor = GridBagConstraints.WEST;
-		gbc_lbPrecio.insets = new Insets(5, 15, 10, 5);
+		gbc_lbPrecio.insets = new Insets(3, 15, 3, 5);
 		gbc_lbPrecio.gridx = 0; 
 		gbc_lbPrecio.gridy = 4;
 		LIBRO.add(lbPrecio, gbc_lbPrecio);
@@ -243,7 +269,7 @@ public class UI extends JFrame {
 		txPrecio.setPreferredSize(tamCaja);
 		GridBagConstraints gbc_txPrecio = new GridBagConstraints();
 		gbc_txPrecio.anchor = GridBagConstraints.WEST;
-		gbc_txPrecio.insets = new Insets(5, 5, 10, 15);
+		gbc_txPrecio.insets = new Insets(3, 5, 3, 5);
 		gbc_txPrecio.gridx = 1; 
 		gbc_txPrecio.gridy = 4;
 		LIBRO.add(txPrecio, gbc_txPrecio);
@@ -253,15 +279,24 @@ public class UI extends JFrame {
 		lbErrorPrecio.setForeground(Color.RED);
 		GridBagConstraints gbc_lbErrorPrecio = new GridBagConstraints();
 		gbc_lbErrorPrecio.anchor = GridBagConstraints.WEST;
-		gbc_lbErrorPrecio.insets = new Insets(5, 5, 10, 10);
+		gbc_lbErrorPrecio.insets = new Insets(3, 5, 3, 10);
 		gbc_lbErrorPrecio.gridx = 2;
 		gbc_lbErrorPrecio.gridy = 4;
 		LIBRO.add(lbErrorPrecio, gbc_lbErrorPrecio);
-
-		// --- COLUMNA 2: IMAGEN (Filas 0 a 4) ---
+		
+		// --- FILA 5: UNIDADES ---
+		JLabel lbUnidades = new JLabel("Unidades:");
+		GridBagConstraints gbc_lbUnidades = new GridBagConstraints();
+		gbc_lbUnidades.anchor = GridBagConstraints.WEST;
+		gbc_lbUnidades.insets = new Insets(3, 15, 8, 5);
+		gbc_lbUnidades.gridx = 0;
+		gbc_lbUnidades.gridy = 5;		
+		LIBRO.add(lbUnidades, gbc_lbUnidades);
+		
+		txUnidades = new JTextField();
+		
 		lbImagenLibro = new JLabel();
 		lbImagenLibro.setHorizontalAlignment(SwingConstants.CENTER);
-		
 		URL urlImagen = UI.class.getResource("/vista/Libreria.png");
 		if (urlImagen != null) {
 			ImageIcon originalIcon = new ImageIcon(urlImagen);
